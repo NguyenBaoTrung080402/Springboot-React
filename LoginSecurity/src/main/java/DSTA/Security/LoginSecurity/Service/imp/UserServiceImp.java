@@ -84,5 +84,69 @@ public class UserServiceImp implements UserService {
         return this.getAccountByUsername(Utils.getCurrentUserLogin().get());
     }
 
+    @Override
+    public DataResponse updateInformationUser(Long id, UserEntity user) {
+        log.debug("Update User");
+        DataResponse res = new DataResponse();
+        try {
+            if(!userRepository.existsById(id)){
+                res.setMessage(Constants.DATA_EMPTY);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            if(!Validate.validateEmail(user.getEmail())){
+                res.setMessage(Constants.REGISTER_FAIL);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            if(!Validate.validateTel(user.getTel())){
+                res.setMessage(Constants.REGISTER_FAIL);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+
+            UserEntity userUpdate = userRepository.getAccountById(id);
+            String password = user.getPassword();
+            userUpdate.setPassword(passwordEncoder.encode(password));
+            userUpdate.setName(user.getName());
+            userUpdate.setEmail(user.getEmail());
+            userUpdate.setDate(user.getDate());
+            userUpdate.setTel(user.getTel());
+            userRepository.save(userUpdate);
+
+            res.setMessage(Constants.UPDATE_SUCCESS);
+            res.setStatus(Constants.SUCCESS);
+            res.setResult(userUpdate);
+            return res;
+
+        }catch (Exception ex){
+            res.setMessage(Constants.UPDATE_FAIL);
+            res.setStatus(Constants.ERROR);
+            return res;
+        }
+    }
+
+    @Override
+    public DataResponse getUserById(Long id) {
+        log.debug("Find User By ID");
+        DataResponse res = new DataResponse();
+        try {
+            if(!userRepository.existsById(id)){
+                res.setMessage(Constants.DATA_EMPTY);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            UserEntity userFindByID = userRepository.getAccountById(id);
+            res.setMessage(Constants.SUCCESS);
+            res.setStatus(Constants.SUCCESS);
+            res.setResult(userFindByID);
+            return res;
+        }catch (Exception ex){
+            res.setMessage(Constants.DATA_ERROR);
+            res.setResult(Constants.ERROR);
+            return res;
+        }
+    }
+
 
 }

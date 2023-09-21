@@ -15,10 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,6 +23,7 @@ public class UserController {
     private final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     UserService userService;
 
@@ -59,5 +57,16 @@ public class UserController {
             return res;
         }
     }
-
+    @PutMapping("update-user/{id}")
+    public DataResponse updateInformation(@PathVariable Long id, @RequestBody UserEntity user){
+        log.debug("update information");
+        DataResponse res = userService.updateInformationUser(id, user);
+        return res;
+    }
+    @GetMapping("find-user/{id}")
+    public DataResponse findID(@PathVariable Long id){
+        log.debug("Find ID");
+        DataResponse res = userService.getUserById(id);
+        return res;
+    }
 }

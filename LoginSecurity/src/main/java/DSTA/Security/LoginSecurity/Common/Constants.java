@@ -39,5 +39,5 @@ public class Constants {
 
     public static final String GUEST = "guest";
     public static final String REGISTER_SUCCESS = "Đăng ký tài khoản thành công\nVui lòng kiểm tra email để nhận thông tin đăng nhập!";
-
+    public static final String SHOES_EXIST = "Đã tồn tại";
 }

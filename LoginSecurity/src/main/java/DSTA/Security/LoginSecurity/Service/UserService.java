@@ -12,4 +12,8 @@ public interface UserService {
     DataResponse register(UserRegisterDto userRegisterDto);
 
     UserEntity getAccountLogin();
+
+    DataResponse updateInformationUser(Long id, UserEntity user);
+
+    DataResponse getUserById(Long id);
 }
