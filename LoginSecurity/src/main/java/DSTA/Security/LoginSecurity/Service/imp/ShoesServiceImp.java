@@ -46,6 +46,7 @@ public class ShoesServiceImp implements ShoesService {
             if (optionalShoes.isPresent()) {
                 res.setMessage(Constants.SHOES_EXIST);
                 res.setStatus(Constants.ERROR);
+                res.setResult(optionalShoes.get());
                 return res;
             }
             shoesRepository.save(shoes);
@@ -55,6 +56,88 @@ public class ShoesServiceImp implements ShoesService {
             return res;
         } catch (Exception ex) {
             res.setMessage(Constants.ERROR);
+            res.setStatus(Constants.ERROR);
+            return res;
+        }
+    }
+
+    @Override
+    public DataResponse updateShoes(Long id, Shoes shoes) {
+        log.debug("update shoes");
+        DataResponse res = new DataResponse();
+        try {
+            if(!shoesRepository.existsById(id)){
+                res.setMessage(Constants.DATA_EMPTY);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            if (shoes.getPrice().equals("") || shoes.getBrand().equals("")
+                    || shoes.getColor().equals("") || shoes.getSize().equals("")
+                    || shoes.getNameProduct().equals("")){
+                res.setMessage(Constants.ERROR);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+
+            Optional<Shoes> optionalShoes = shoesRepository.findByName(shoes.getNameProduct());
+            if (optionalShoes.isPresent()) {
+                res.setMessage(Constants.SHOES_EXIST);
+                res.setStatus(Constants.ERROR);
+                res.setResult(optionalShoes.get());
+                return res;
+            }
+
+            Shoes updateShoes = shoesRepository.getShoesById(id);
+            updateShoes.setNameProduct(shoes.getNameProduct());
+            updateShoes.setBrand(shoes.getBrand());
+            updateShoes.setColor(shoes.getColor());
+            try {
+                Integer.parseInt(String.valueOf(shoes.getSize()));
+            } catch (NumberFormatException ex) {
+                res.setMessage(Constants.VALUE_INVALID);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            updateShoes.setSize(shoes.getSize());
+            try {
+                Float.parseFloat(String.valueOf(shoes.getPrice()));
+            } catch (NumberFormatException ex) {
+                res.setMessage(Constants.VALUE_INVALID);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            updateShoes.setPrice(shoes.getPrice());
+
+            shoesRepository.save(shoes);
+            res.setMessage(Constants.UPDATE_SUCCESS);
+            res.setStatus(Constants.SUCCESS);
+            res.setResult(shoes);
+            return res;
+        }catch (Exception ex){
+            res.setMessage(Constants.UPDATE_FAIL);
+            res.setStatus(Constants.ERROR);
+            return res;
+        }
+
+    }
+
+    @Override
+    public DataResponse findShoesByID(Long id) {
+        log.debug("Find Shoes By Name");
+        DataResponse res = new DataResponse();
+        try{
+            if(!shoesRepository.existsById(id)){
+                res.setMessage(Constants.DATA_ERROR);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            Optional<Shoes> shoesByID = shoesRepository.findById(id);
+            res.setMessage(Constants.SUCCESS);
+            res.setStatus(Constants.SUCCESS);
+            res.setResult(shoesByID);
+            return res;
+        }catch (Exception ex){
+            res.setMessage(Constants.DATA_ERROR);
             res.setStatus(Constants.ERROR);
             return res;
         }

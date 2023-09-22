@@ -10,4 +10,9 @@ public interface ShoesService {
     List<Shoes> getAllShoes();
 
     DataResponse createShoes(Shoes shoes);
+
+    DataResponse updateShoes(Long id, Shoes shoes);
+
+    DataResponse findShoesByID(Long id);
+
 }

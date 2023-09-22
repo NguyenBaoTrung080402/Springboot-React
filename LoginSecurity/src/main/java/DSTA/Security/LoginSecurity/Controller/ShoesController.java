@@ -23,11 +23,22 @@ public class ShoesController {
         log.debug("List Shoes");
         return shoseService.getAllShoes();
     }
-    @PostMapping("create-shoes")
+    @PostMapping("add-shoes")
     public DataResponse createShoes(@RequestBody Shoes shoes){
         log.debug("Create shoes");
         DataResponse res = shoseService.createShoes(shoes);
         return res;
     }
-
+    @PutMapping("update-shoes/{id}")
+    public DataResponse updateShoes(@PathVariable Long id, @RequestBody Shoes shoes){
+        log.debug("updateShoes");
+        DataResponse res = shoseService.updateShoes(id, shoes);
+        return res;
+    }
+    @GetMapping("find-shoes/{id}")
+    public DataResponse findShoes(@PathVariable Long id){
+        log.debug("Find Shoes By Name");
+        DataResponse res = shoseService.findShoesByID(id);
+        return res;
+    }
 }
