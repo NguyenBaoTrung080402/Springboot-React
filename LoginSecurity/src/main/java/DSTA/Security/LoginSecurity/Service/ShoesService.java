@@ -15,4 +15,5 @@ public interface ShoesService {
 
     DataResponse findShoesByID(Long id);
 
+    DataResponse deleteShoes(Long id);
 }

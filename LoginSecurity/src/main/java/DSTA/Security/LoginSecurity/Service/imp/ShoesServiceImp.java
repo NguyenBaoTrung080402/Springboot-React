@@ -143,4 +143,26 @@ public class ShoesServiceImp implements ShoesService {
         }
     }
 
+    @Override
+    public DataResponse deleteShoes(Long id) {
+        log.debug("Delete Shoes");
+        DataResponse res = new DataResponse();
+        try {
+            if(!shoesRepository.existsById(id)){
+                res.setMessage(Constants.DELETE_FAIL);
+                res.setStatus(Constants.ERROR);
+                return res;
+            }
+            shoesRepository.deleteById(id);
+            res.setMessage(Constants.DELETE_SUCCESS);
+            res.setStatus(Constants.SUCCESS);
+            res.setResult(Constants.SUCCESS);
+            return res;
+        }catch (Exception ex){
+            res.setMessage(Constants.DELETE_FAIL);
+            res.setStatus(Constants.ERROR);
+            return res;
+        }
+    }
+
 }

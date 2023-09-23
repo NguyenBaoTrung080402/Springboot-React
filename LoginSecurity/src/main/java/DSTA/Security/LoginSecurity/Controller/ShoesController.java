@@ -41,4 +41,10 @@ public class ShoesController {
         DataResponse res = shoseService.findShoesByID(id);
         return res;
     }
+    @DeleteMapping("delete-shoes/{id}")
+    public DataResponse deleteShoesByID(@PathVariable Long id){
+        log.debug("Delete Shoes");
+        DataResponse res = shoseService.deleteShoes(id);
+        return res;
+    }
 }
